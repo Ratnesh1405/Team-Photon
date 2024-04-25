@@ -1,0 +1,46 @@
+% Define sphere parameters
+radius = 1; % Radius of the sphere
+numPoints = 50; % Number of points for sphere approximation
+
+% Generate sphere points
+theta = linspace(0, 2*pi, numPoints);
+phi = linspace(0, pi, numPoints);
+[theta, phi] = meshgrid(theta, phi);
+x = radius * sin(phi) .* cos(theta);
+y = radius * sin(phi) .* sin(theta);
+z = radius * cos(phi);
+
+% Initialize figure
+figure;
+hold on;
+axis equal;
+axis([-1.5 1.5 -1.5 1.5 -1.5 1.5]);
+xlabel('X');
+ylabel('Y');
+zlabel('Z');
+title('Painting Sphere Face by Face');
+
+% Plot the sphere
+hSphere = surf(x, y, z);
+set(hSphere, 'FaceColor', 'none', 'EdgeColor', 'none');
+
+% Define paint color
+paintColor = [1, 0, 0]; % Red color
+
+% Paint the sphere face by face
+for i = 1:size(x, 1) - 1
+    for j = 1:size(x, 2) - 1
+        % Get vertices of the current face
+        vertices = [x(i,j), y(i,j), z(i,j);
+                    x(i+1,j), y(i+1,j), z(i+1,j);
+                    x(i+1,j+1), y(i+1,j+1), z(i+1,j+1);
+                    x(i,j+1), y(i,j+1), z(i,j+1)];
+                
+        % Plot the current face
+        patch('Vertices', vertices, 'Faces', [1 2 3 4], 'FaceColor', paintColor);
+        
+        % Pause to visualize painting process
+        pause(0.01);
+    end
+end
+
